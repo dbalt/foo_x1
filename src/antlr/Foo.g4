@@ -1,4 +1,4 @@
-grammar Hello;
+grammar Foo;
 
 
 AND : 'AND' | 'and' ;
@@ -9,8 +9,8 @@ OP_EQ : '=' ;
 OP_NOT_EQ : '!=' ;
 OP_GR : '>' ;
 OP_GR_EQ : '>=' ;
-OP_LS : '<' ;
 OP_LS_EQ : '<=' ;
+OP_LS : '<' ;
 OP_RE : 'RE' | 're' ;
 
 OP_IN_LST : 'IN' | 'in' ;
@@ -18,6 +18,7 @@ OP_NOT_IN_LST : 'NOT IN' | 'not in' ;
 
 WORD : [A-Za-z_]+ ;
 NUMBER : [0-9]+ ;
+//DATE : [0-9]{2}'.'[0-9]{2}'.'[0-9]{4} ;
 
 WS : [ \r\t\n]+ -> skip ;
 
@@ -46,6 +47,7 @@ fld
 	
 val 
 	: NUMBER
+//	| DATE
 	| '"' ~('"')* '"'	
 	;
 

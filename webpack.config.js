@@ -4,6 +4,9 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('./utils/WatchMissingNodeModulesPlugin');
 
 module.exports = {
+    node: {
+        fs: "empty"
+    },
     devtool: 'cheap-module-eval-source-map',
     entry: {
         app: [

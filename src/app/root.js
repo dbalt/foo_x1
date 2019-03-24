@@ -6,80 +6,84 @@ import Inp from './tools/input'
 import Pres from './tools/pres'
 
 import ResultSet from './resultset'
-import {fetchData, Tps} from "./maintenance";
+import {fetchData, Tps} from "./data";
+
+import AstViewer from './ast_viewer'
+
 
 const RootComponent = make_cmp()
-    .setView(
-        props => {
-            const containerStyle = {margin: '25px',}
+RootComponent.view = props => {
+    const containerStyle = {margin: '25px',}
 
-            const inputStyle = {
-                width: 'calc(100% - 12px)',
-                lineHeight: '15px',
-                padding: '3px 6px 3px 6px',
-                fontSize: '15px',
-                border: "1px solid gray",
-            }
+    const inputStyle = {
+        width: 'calc(100% - 12px)',
+        lineHeight: '15px',
+        padding: '3px 6px 3px 6px',
+        fontSize: '15px',
+        border: "1px solid gray",
+    }
 
-            return (<div style={containerStyle}>
-                <Pres label="Debug version of component">
-                    <Pres label="Query string">
-                        <Inp path={['zzz', 'inputVal']} style={inputStyle}/>
-                    </Pres>
+    const inputValPath = ['zzz', 'inputVal']
 
-                    <Pres label="Editing widgets"/>
+    return (<div style={containerStyle}>
+        <Pres label="Debug version of component">
+            <Pres label="Query string">
+                <Inp path={inputValPath} style={inputStyle}/>
+            </Pres>
 
-                    <Pres label="AST viewer"/>
+            <Pres label="Editing widgets"/>
 
-                    <Pres label="Result">
-                        <ResultSet path={['dst']}/>
-                    </Pres>
+            <Pres label="AST viewer">
+                <AstViewer strPath={inputValPath}/>
+            </Pres>
 
-                    <Pres label="Full dataset">
-                        <ResultSet path={['src', 'dataset']}/>
-                    </Pres>
+            <Pres label="Result">
+                <ResultSet path={['dst']}/>
+            </Pres>
 
-                </Pres>
-            </div>)
-        }
-    )
-    .setStp(
-        (state, props) => {
-            return {
-                ...props,
-                foo: state.getIn(['foo'], ''),
-            }
-        }
-    )
-    .setMount(
-        async props => {
+            <Pres label="Full dataset">
+                <ResultSet path={['src', 'dataset']}/>
+            </Pres>
 
-            const data = await fetchData() // Типа мы её зафетчили откуда то
+        </Pres>
+    </div>)
+}
 
-            const stringFields = data.schema.filter(it => it.tp == Tps.str).map(it => it.nm)
+RootComponent.stp = (state, props) => {
+    return {
+        ...props,
+        foo: state.getIn(['foo'], ''),
+    }
+}
 
-            const fieldValues = data.dataset.reduce((accumulator, currentItem) => {
-                stringFields.forEach(fld => {
+RootComponent.mount = async props => {
 
-                    if (!(fld in accumulator))
-                        accumulator[fld] = []
+    const data = await fetchData() // Типа мы её зафетчили откуда то
 
-                    const arr = accumulator[fld]
+    const stringFields = data.schema.filter(it => it.tp == Tps.str).map(it => it.nm)
 
-                    const val = currentItem[fld]
+    const fieldValues = data.dataset.reduce((accumulator, currentItem) => {
+        stringFields.forEach(fld => {
 
-                    if (!arr.includes(val))
-                        arr.push(val)
-                })
-                return accumulator
-            }, new Object())
+            if (!(fld in accumulator))
+                accumulator[fld] = []
 
-            act('prepare')
-                .set(['src'], data)
-                .set(['src', 'fieldVals'], fieldValues)
-                .dispatch()
+            const arr = accumulator[fld]
+
+            const val = currentItem[fld]
+
+            if (!arr.includes(val))
+                arr.push(val)
         })
-    .make()
+        return accumulator
+    }, new Object())
 
-export default RootComponent
+    act('initial_component_state')
+        .set(['src'], data)
+        .set(['src', 'fieldVals'], fieldValues)
+        .dispatch()
+}
+
+
+export default RootComponent.make()
 
