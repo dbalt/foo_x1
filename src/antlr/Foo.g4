@@ -20,7 +20,6 @@ WORD : [A-Za-z_]+ ;
 NUMBER : [0-9]+ ;
 //DATE : [0-9]{2}'.'[0-9]{2}'.'[0-9]{4} ;
 
-WS : [ \r\t\n]+ -> skip ;
 
 
 eval : expr ;
@@ -48,8 +47,13 @@ fld
 val 
 	: NUMBER
 //	| DATE
-	| '"' ~('"')* '"'	
+//	| anytext
+	| '"' ~('"')* '"'
 	;
+
+//anytext
+//    : '"' ~('"')* '"'
+//   ;
 
 
 val_lst 
@@ -59,3 +63,4 @@ val_lst
 op_single : OP_EQ | OP_NOT_EQ | OP_GR | OP_GR_EQ | OP_LS | OP_LS_EQ | OP_RE ;
 op_lst : OP_IN_LST | OP_NOT_IN_LST ;
 
+WS : [ \r\t\n]+ -> skip ;

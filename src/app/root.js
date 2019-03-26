@@ -11,6 +11,11 @@ import {fetchData, Tps} from "./data";
 import AstViewer from './ast_viewer'
 
 
+import TreeState from './tree_state'
+import Completions from './completions'
+
+import {proc_queryStringWasChanged} from "./processing";
+
 const RootComponent = make_cmp()
 RootComponent.view = props => {
     const containerStyle = {margin: '25px',}
@@ -31,15 +36,22 @@ RootComponent.view = props => {
                 <Inp path={inputValPath} style={inputStyle}/>
             </Pres>
 
-            <Pres label="Editing widgets"/>
+            <Pres label="Editing widgets"> TO DO </Pres>
+
+
+            <Pres label="Tree state"> <TreeState/> </Pres>
+
+            <Pres label="Completions"> <Completions/> </Pres>
+
+
+            <Pres label="Result">
+                <ResultSet path={['dst']}/>
+            </Pres>
 
             <Pres label="AST viewer">
                 <AstViewer strPath={inputValPath}/>
             </Pres>
 
-            <Pres label="Result">
-                <ResultSet path={['dst']}/>
-            </Pres>
 
             <Pres label="Full dataset">
                 <ResultSet path={['src', 'dataset']}/>
@@ -82,6 +94,12 @@ RootComponent.mount = async props => {
         .set(['src'], data)
         .set(['src', 'fieldVals'], fieldValues)
         .dispatch()
+
+    setTimeout(() => {
+        const tst = 'job not in ("admin", "programmer") and sex = "female" and ( weight < 75 and iq > 120 or  drink in ("beer", "vodka"))'
+        proc_queryStringWasChanged(tst, ImmJS.fromJS(data.schema), ImmJS.fromJS(fieldValues), ImmJS.fromJS(data.dataset))
+        act('demo').set(['zzz', 'inputVal'], tst).dispatch()
+    }, 1000)
 }
 
 

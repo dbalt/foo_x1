@@ -4,35 +4,28 @@ import pt from 'prop-types'
 import ImmJS from 'immutable'
 import immpt from 'react-immutable-proptypes'
 
-import antlr4 from 'antlr4/index'
-import FooLexer from '../antlr/FooLexer'
-import FooParser from '../antlr/FooParser'
-import Listener from './listener'
 
-const fn_parse = input => {
-    const chars = new antlr4.InputStream(input)
-    const lexer = new FooLexer.FooLexer(chars)
-    const tokens = new antlr4.CommonTokenStream(lexer)
-    const parser = new FooParser.FooParser(tokens)
-    parser.buildParseTrees = true
-    const tree = parser.eval()
-    const listener = new Listener()
-    antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
-}
+import {fn_parseQueryString} from "./processing";
 
+import JsonTree from 'react-json-tree'
 
 const X = make_cmp()
 
 X.view = props => {
-    return <div> Viewer </div>
+    return <div><JsonTree data={props.tree}/></div>
 }
 
 X.stp = (state, props) => {
     const input = state.getIn(props.strPath, '')
-    const res = fn_parse(input)
 
+    const schema = state.getIn(['src', 'schema'], ImmJS.fromJS([]))
+    const fieldVals = state.getIn(['src', 'fieldVals'], ImmJS.fromJS({}))
+
+    const res = fn_parseQueryString(schema, fieldVals)(input)
+    console.log(res)
     return {
-        ...props
+        ...props,
+        tree: res,
     }
 }
 
