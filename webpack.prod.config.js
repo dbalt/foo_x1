@@ -4,6 +4,9 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('./utils/WatchMissingNodeModulesPlugin');
 
 module.exports = {
+    node: {
+        fs: "empty"
+    },
     entry: './src/index',
     output: {
         path: path.resolve(__dirname, 'prod'),
@@ -61,8 +64,8 @@ module.exports = {
     plugins: [
 
         new webpack.DefinePlugin({
-            'process.env' : {
-                NODE_ENV : JSON.stringify('production')
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
             }
         }),
         new webpack.optimize.UglifyJsPlugin()
