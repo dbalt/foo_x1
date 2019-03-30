@@ -9,7 +9,7 @@ import {Tps} from "../srcdata";
 
 
 const ResView = props => {
-    console.log('debug')
+    // console.log('debug')
     return (<ResultSetView items={props.items}/>)
 }
 

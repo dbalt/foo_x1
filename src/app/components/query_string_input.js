@@ -14,7 +14,10 @@ const proc_recalcString = (path, treePath) => {
     console.log('recalc string')
 
     const s = currentState()
-    if (!s.hasIn(treePath)) return
+    if (!s.hasIn([...treePath, 'tp'])) {
+        act('recalc_str').del(path).dispatch()
+        return
+    }
 
     const sd = new SourceData(s)
     const tree = s.getIn(treePath)

@@ -10,7 +10,7 @@ import EditInt from './editor_int'
 import EditStr from './editor_str'
 
 const fn_getContext = (state, treePath) => {
-    console.log('Editors context')
+    // console.log('Editors context')
     const tree = state.getIn(treePath, ImmJS.fromJS({}))
     const sd = new SourceData(state)
 
@@ -95,7 +95,7 @@ const fn_getContext = (state, treePath) => {
 
 const Container = make_cmp()
 Container.view = props => {
-    console.log('container')
+    // console.log('container')
     if (!props.ok) return <div> Tree structure cannot be edited through gui </div>
 
     let k = 0
@@ -103,7 +103,7 @@ Container.view = props => {
 
     const fn_cmp = it => {
         if (it.get('tp') === Tps.str) return (<EditStr item={it} id={fn_key()}/>)
-        if (it.get('tp') === Tps.int) return (<EditInt item={it} id={fn_key()}/>)
+        if (it.get('tp') === Tps.int) return (<EditInt treePath={props.treePath} item={it} id={fn_key()}/>)
         return null
     }
 
@@ -114,7 +114,7 @@ Container.view = props => {
 Container.stp = (state, props) => {
     const {ok, nodes} = fn_getContext(state, props.treePath)
     if (!ok) return {ok}
-    console.log('calc')
+    // console.log('calc')
     const sd = new SourceData(state)
     const items = sd.fields().filter(it => it.type === Tps.int || it.type === Tps.str).map(it => {
         const hasNode = nodes.has(it.name)
@@ -129,7 +129,7 @@ Container.stp = (state, props) => {
         return ImmJS.fromJS(res)
     })
 
-    return {ok, items}
+    return {ok, items, treePath: props.treePath,}
 }
 const ContainerC = Container.make()
 ContainerC.propTypes = {

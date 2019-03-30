@@ -140,7 +140,7 @@ const CompletionsListX = make_cmp()
 
 CompletionsListX.stp = (state, props) => {
     const treePath = ['calc', 'tree']
-    console.log('try to recalc')
+    // console.log('try to recalc')
     const completions = fn_getCompletions(state, treePath)
 
     return {

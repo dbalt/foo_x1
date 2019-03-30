@@ -166,4 +166,4 @@ const wrap = (view, stp, mount, umount) => {
 const make_cmp = (view, stp, mount, umount) => new ComponentConstructor(view, stp, mount, umount)
 
 
-export {store, currentState, act, wrap, make_cmp}
+export {store, currentState, act, wrap, make_cmp, pipe, applyFn}

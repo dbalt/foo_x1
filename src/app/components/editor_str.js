@@ -8,8 +8,10 @@ import {proc_visitImmTree} from "../processing";
 import {Tps} from "../srcdata";
 
 
+const s0 = {border: '1px solid gray', display: 'inline-block', margin: '6px', padding: '2px',}
+
 const EditStr = props => {
-    return <div>
+    return <div style={s0}>
         str # name : {props.item.get('name')} # hasNode : {props.item.get('hasNode') ? 'YES' : 'NO'}
     </div>
 }
