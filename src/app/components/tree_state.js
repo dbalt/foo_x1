@@ -1,14 +1,14 @@
 import React from 'react'
-import {make_cmp, act} from "../boilerplate";
+import {make_cmp, act} from "../../boilerplate";
 
 import pt from 'prop-types'
 import ImmJS from 'immutable'
 import immpt from 'react-immutable-proptypes'
 
 
-const X = make_cmp()
+const TreeStateX = make_cmp()
 
-X.view = props => {
+TreeStateX.view = props => {
     const {isValid, isComplete} = props
     if (isValid && isComplete) return <div> (OK) Tree has valid structure and it is complete.</div>
     if (isValid && !isComplete) return <div> (CAN BE OK) Tree has valid structure but its incomplete </div>
@@ -16,7 +16,7 @@ X.view = props => {
 
 }
 
-X.stp = (state, props) => {
+TreeStateX.stp = (state, props) => {
     return {
         ...props,
         isValid: state.getIn(['calc', 'treeIsValid'], false),
@@ -24,9 +24,9 @@ X.stp = (state, props) => {
     }
 }
 
-const V = X.make()
+const TreeState = TreeStateX.make()
 
-export default V
+export default TreeState
 
 
 

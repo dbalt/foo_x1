@@ -2,19 +2,29 @@ import React from 'react'
 import {make_cmp, act} from "../boilerplate";
 
 import ImmJS from 'immutable'
-import Inp from './tools/input'
+import Inp from './components/query_string_input'
 import Pres from './tools/pres'
+import Recalc from './tools/recalc'
 
-import ResultSet from './resultset'
-import {fetchData, Tps} from "./data";
+import {loadAndPrepareAllStuff} from "./srcdata";
 
-import AstViewer from './ast_viewer'
+import {ResultSetFiltered, ResultSetSource} from "./components/resultcalc";
 
+import AstViewer from './components/ast_viewer'
 
-import TreeState from './tree_state'
-import Completions from './completions'
+//
+import Editors from './components/editors'
+//
+// import TreeState from './tree_state'
+import Completions from './components/completions'
+
 
 import {proc_queryStringWasChanged} from "./processing";
+
+
+const inputValPath = ['zzz', 'inputVal']
+const inputRecalcValPath = ['zzz', 'inputValRecalcFlag']
+
 
 const RootComponent = make_cmp()
 RootComponent.view = props => {
@@ -28,24 +38,25 @@ RootComponent.view = props => {
         border: "1px solid gray",
     }
 
-    const inputValPath = ['zzz', 'inputVal']
 
     return (<div style={containerStyle}>
         <Pres label="Debug version of component">
             <Pres label="Query string">
-                <Inp path={inputValPath} style={inputStyle}/>
+                <Recalc flagPath={inputRecalcValPath}>
+                    <Inp path={inputValPath} style={inputStyle}/>
+                </Recalc>
             </Pres>
 
-            <Pres label="Editing widgets"> TO DO </Pres>
+            <Pres label="Editing widgets"> <Editors treePath={['calc', 'tree']}/> </Pres>
 
 
-            <Pres label="Tree state"> <TreeState/> </Pres>
+            {/*<Pres label="Tree state"> <TreeState/> </Pres>*/}
 
             <Pres label="Completions"> <Completions/> </Pres>
 
 
             <Pres label="Result">
-                <ResultSet path={['dst']}/>
+                <ResultSetFiltered path={['src', 'dataset']} treePath={['calc', 'tree']}/>
             </Pres>
 
             <Pres label="AST viewer">
@@ -54,7 +65,7 @@ RootComponent.view = props => {
 
 
             <Pres label="Full dataset">
-                <ResultSet path={['src', 'dataset']}/>
+                <ResultSetSource path={['src', 'dataset']}/>
             </Pres>
 
         </Pres>
@@ -64,42 +75,24 @@ RootComponent.view = props => {
 RootComponent.stp = (state, props) => {
     return {
         ...props,
+        src: state.get('src'),
         foo: state.getIn(['foo'], ''),
     }
 }
 
 RootComponent.mount = async props => {
+    // Загрузим и приготовим всё
+    await loadAndPrepareAllStuff()
 
-    const data = await fetchData() // Типа мы её зафетчили откуда то
-
-    const stringFields = data.schema.filter(it => it.tp == Tps.str).map(it => it.nm)
-
-    const fieldValues = data.dataset.reduce((accumulator, currentItem) => {
-        stringFields.forEach(fld => {
-
-            if (!(fld in accumulator))
-                accumulator[fld] = []
-
-            const arr = accumulator[fld]
-
-            const val = currentItem[fld]
-
-            if (!arr.includes(val))
-                arr.push(val)
-        })
-        return accumulator
-    }, new Object())
-
-    act('initial_component_state')
-        .set(['src'], data)
-        .set(['src', 'fieldVals'], fieldValues)
-        .dispatch()
-
+    // Типа мы послали нормальную строчку
     setTimeout(() => {
         const tst = 'job not in ("admin", "programmer") and sex = "female" and ( weight < 75 and iq > 120 or  drink in ("beer", "vodka"))'
-        proc_queryStringWasChanged(tst, ImmJS.fromJS(data.schema), ImmJS.fromJS(fieldValues), ImmJS.fromJS(data.dataset))
-        act('demo').set(['zzz', 'inputVal'], tst).dispatch()
+        // proc_queryStringWasChanged(tst, props.src.get('schema'), ImmJS.fromJS(fieldValues), ImmJS.fromJS(data.dataset))
+        proc_queryStringWasChanged(tst, ['zzz', 'inputVal'])
+        // act('demo').set(['zzz', 'inputVal'], tst).dispatch()
     }, 1000)
+
+    // setInterval(() => act('tst').set(inputRecalcValPath, true).dispatch(), 5000)
 }
 
 

@@ -52,7 +52,7 @@ const expr_is_and = ctx => expr_is_op(ctx) && childText(ctx, 1).toLowerCase() ==
 const expr_is_or = ctx => expr_is_op(ctx) && childText(ctx, 1).toLowerCase() === 'or'
 
 
-class MyFooListener extends FooListener.FooListener {
+class   MyFooListener extends FooListener.FooListener {
 
     constructor() {
         super()

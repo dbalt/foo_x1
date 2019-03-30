@@ -2,7 +2,7 @@ import React from 'react'
 import pt from 'prop-types'
 
 
-const V = props => {
+const Pres = props => {
     const contStyle = {
         margin: '10px',
         border: '1px solid gray',
@@ -22,8 +22,8 @@ const V = props => {
 }
 
 
-V.propTypes = {
+Pres.propTypes = {
     label: pt.string.isRequired,
 }
 
-export default V
+export default Pres

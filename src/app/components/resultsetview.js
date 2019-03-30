@@ -1,12 +1,12 @@
 import React from 'react'
-import {make_cmp, act} from "../boilerplate";
+import {make_cmp, act} from "../../boilerplate";
 import pt from 'prop-types'
 import ImmJS from 'immutable'
 import immpt from 'react-immutable-proptypes'
 import strftime from 'strftime'
 
 
-const X = make_cmp()
+const ResultSetViewerX = make_cmp()
 
 const tds = {
     padding: '3px 10px 3px 10px',
@@ -47,7 +47,7 @@ const TblRow = props => {
     </tr>
 }
 
-X.view = props => {
+ResultSetViewerX.view = props => {
 
     const tst = {
         border: '1px solid lightgrey',
@@ -64,20 +64,20 @@ X.view = props => {
 
 }
 
-X.stp = (s, p) => {
-    return {
-        ...p,
-        items: s.getIn(p.path, ImmJS.fromJS([])),
-    }
+// X.stp = (s, p) => {
+//     return {
+//         ...p,
+//         items: s.getIn(p.path, ImmJS.fromJS([])),
+//     }
+// }
+
+const ResultSetViewer = ResultSetViewerX.make()
+
+ResultSetViewer.propTypes = {
+    items: immpt.list.isRequired,
 }
 
-const V = X.make()
-
-V.propTypes = {
-    path: pt.array.isRequired,
-}
-
-export default V
+export default ResultSetViewer
 
 
 
