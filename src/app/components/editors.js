@@ -98,18 +98,20 @@ Container.view = props => {
     // console.log('container')
     if (!props.ok) return <div> Tree structure cannot be edited through gui </div>
 
+    const sx1 = {display: 'flex', flexWrap: 'wrap',}
+
     let k = 0
     const fn_key = () => k++
 
     const fn_cmp = it => {
-        if (it.get('tp') === Tps.str) return (<EditStr item={it} id={fn_key()}/>)
+        if (it.get('tp') === Tps.str) return (<EditStr treePath={props.treePath} item={it} id={fn_key()}/>)
         if (it.get('tp') === Tps.int) return (<EditInt treePath={props.treePath} item={it} id={fn_key()}/>)
         return null
     }
 
     const items = props.items.map(fn_cmp)
 
-    return <div> {items} </div>
+    return <div style={sx1}> {items} </div>
 }
 Container.stp = (state, props) => {
     const {ok, nodes} = fn_getContext(state, props.treePath)

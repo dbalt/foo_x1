@@ -13,7 +13,7 @@ const intOps = ['>', '>=', '<=', '<', '=', '!=']
 const ComponentX = make_cmp().setView(props => {
 
     const s1 = {display: 'inline-block', margin: '2px', padding: '2px'}
-    const s0 = {border: '1px solid gray', display: 'inline-block', margin: '6px', padding: '2px',}
+    const s0 = {border: '1px solid gray', display: 'inline-block', margin: '6px', padding: '2px', maxHeight: '31.8px',}
     const si = {width: '50px',}
     const s1f = {...s1, paddingLeft: '10px', paddingRight: '10px', fontSize: 'large',}
 
@@ -187,3 +187,4 @@ ComponentX.propTypes = {
 }
 
 export default ComponentX
+export {proc_createNode, proc_removeNode}

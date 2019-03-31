@@ -93,7 +93,7 @@ const act = tp => new ActionBuilder(tp)
 const currentState = () => store.getState()
 
 
-class ComponentConstructor {
+class ComponentBuilder {
     constructor(view = null, stp = null, mount = null, umount = null) {
         this.view = view //stateless component
         this.stp = stp
@@ -138,12 +138,12 @@ class ComponentConstructor {
 
             componentDidMount() {
                 const fn = out.mount
-                if (ComponentConstructor._is_fn(fn)) fn(this.props)
+                if (ComponentBuilder._is_fn(fn)) fn(this.props)
             }
 
             componentWillUnmount() {
                 const fn = out.umount
-                if (ComponentConstructor._is_fn(fn)) fn(this.props)
+                if (ComponentBuilder._is_fn(fn)) fn(this.props)
             }
 
             render() {
@@ -152,18 +152,18 @@ class ComponentConstructor {
             }
         }
 
-        const stp = ComponentConstructor._is_fn(out.stp) ? out.stp : (s, p) => p
+        const stp = ComponentBuilder._is_fn(out.stp) ? out.stp : (s, p) => p
         return connect(stp)(cls)
     }
 }
 
 
 const wrap = (view, stp, mount, umount) => {
-    const c = new ComponentConstructor(view, stp, mount, umount)
+    const c = new ComponentBuilder(view, stp, mount, umount)
     return c.make()
 }
 
-const make_cmp = (view, stp, mount, umount) => new ComponentConstructor(view, stp, mount, umount)
+const make_cmp = (view, stp, mount, umount) => new ComponentBuilder(view, stp, mount, umount)
 
 
 export {store, currentState, act, wrap, make_cmp, pipe, applyFn}
