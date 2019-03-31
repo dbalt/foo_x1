@@ -85,12 +85,12 @@ RootComponent.mount = async props => {
     await loadAndPrepareAllStuff()
 
     // Типа мы послали нормальную строчку
-    setTimeout(() => {
-        const tst = 'job not in ("admin", "programmer") and sex = "female" and ( weight < 75 and iq > 120 or  drink in ("beer", "vodka"))'
-        // proc_queryStringWasChanged(tst, props.src.get('schema'), ImmJS.fromJS(fieldValues), ImmJS.fromJS(data.dataset))
-        proc_queryStringWasChanged(tst, ['zzz', 'inputVal'])
-        // act('demo').set(['zzz', 'inputVal'], tst).dispatch()
-    }, 1000)
+    // setTimeout(() => {
+    //     const tst = 'job not in ("admin", "programmer") and sex = "female" and ( weight < 75 and iq > 120 or  drink in ("beer", "vodka"))'
+    //     // proc_queryStringWasChanged(tst, props.src.get('schema'), ImmJS.fromJS(fieldValues), ImmJS.fromJS(data.dataset))
+    //     proc_queryStringWasChanged(tst, ['zzz', 'inputVal'])
+    //     // act('demo').set(['zzz', 'inputVal'], tst).dispatch()
+    // }, 1000)
 
     // setInterval(() => act('tst').set(inputRecalcValPath, true).dispatch(), 5000)
 }
